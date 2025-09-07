@@ -1,0 +1,26 @@
+# Arquivos de sistema e de cache
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores de código e IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependências de pacotes
+node_modules/
+vendor/
+build/
+dist/
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+temp/
+
+# Arquivos de credenciais ou de configuração local
+.env
+.env.local
+config.local.json
