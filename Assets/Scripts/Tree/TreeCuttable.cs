@@ -37,7 +37,7 @@ public class TreeCuttable : ToolHit
                 position.y -= spread * UnityEngine.Random.value - spread / 2;
                 Debug.Log("🔨 Tentando instanciar " + pickUpDrop.name);
 
-                Debug.Log("📦 Instanciando Log na posição " + position);
+                Debug.Log("📦 Instanciando  Log na posição " + position);
 
                 GameObject log = Instantiate(pickUpDrop);
                 log.transform.position = position;
