@@ -49,6 +49,9 @@ public class ToolsCharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        Debug.Log("✅ ToolsCharacterController ativo no Player!");
+
         character = GetComponent<PlayerControl>();
         rgbd2d = GetComponent<Rigidbody2D>();
         fields = new Dictionary<Vector2Int, TileData>();
@@ -68,6 +71,9 @@ public class ToolsCharacterController : MonoBehaviour
         Marker();
         if (Input.GetMouseButtonDown(0)) // lewy przycisk myszki
         {
+            Debug.Log("➡️ Clique detectado! Ferramenta: " +
+                 (toolbarController.GetItem != null ? toolbarController.GetItem.Name : "Nenhuma"));
+
             if (!inventoryController.isOpen) //you can use tools only if inventory is closed
             {
                 if (UseToolWorld() == true)
@@ -115,53 +121,45 @@ public class ToolsCharacterController : MonoBehaviour
         }
         return false;
     }
-            private void SelectTile()
+    private void SelectTile()
     {
+        // --- Campos (fields) ---
         selectedTilePosition = tileMapReadController.GetGridPosition(Input.mousePosition, true);
         TileBase tileBase = tileMapReadController.GetTileBase(selectedTilePosition);
-        try
+
+        if (tileBase != null) // só processa se realmente houver tile
         {
             TileData tileData = tileMapReadController.GetTileData(tileBase);
-            if (!(tileData is null))
+            if (tileData != null)
             {
-                if (!fields.ContainsKey((Vector2Int)selectedTilePosition))
-                {
-                    fields.Add((Vector2Int)selectedTilePosition, tileData);
-                }
+                Vector2Int pos = (Vector2Int)selectedTilePosition;
+
+                if (!fields.ContainsKey(pos))
+                    fields.Add(pos, tileData);
                 else
-                {
-                    fields[(Vector2Int)selectedTilePosition] = tileData;
-                }
+                    fields[pos] = tileData;
             }
         }
-        catch
-        {
-            return;
-        }
 
+        // --- Cultivos (crops) ---
         selectedCropPosition = cropsReadController.GetGridPosition(Input.mousePosition, true);
         TileBase cropBase = cropsReadController.GetTileBase(selectedTilePosition);
-        try
+
+        if (cropBase != null) // só processa se houver tile válido de crop
         {
             CropData cropData = cropsReadController.GetCropData(cropBase);
-            if (!(cropData is null))
+            if (cropData != null)
             {
-                if (!crops.ContainsKey((Vector2Int)selectedTilePosition))
-                {
-                    crops.Add((Vector2Int)selectedTilePosition, cropData);
-                }
+                Vector2Int pos = (Vector2Int)selectedTilePosition;
+
+                if (!crops.ContainsKey(pos))
+                    crops.Add(pos, cropData);
                 else
-                {
-                    crops[(Vector2Int)selectedTilePosition] = cropData;
-                }
+                    crops[pos] = cropData;
             }
         }
-        catch
-        {
-            return;
-        }
-
     }
+
 
     void CanSelectCheck()
     {
@@ -185,46 +183,27 @@ public class ToolsCharacterController : MonoBehaviour
         if (Time.timeScale == 0)
             return false;
 
-        // CUTTING TREE
         Vector2 position = rgbd2d.position + character.lastMotionVector * offsetDistance;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(position, sizeOfInteractableArea);
 
-
         foreach (Collider2D collidor in colliders)
         {
+            Debug.Log("🔍 Detectado collider: " + collidor.gameObject.name);
+
             ToolHit hitTree = collidor.GetComponent<ToolHit>();
-            CampFireHit hitFire = collidor.GetComponent<CampFireHit>();
-            ChestHit hitChest = collidor.GetComponent<ChestHit>();
-            PlayerHit hitPlayer = collidor.GetComponent<PlayerHit>();
 
             if (hitTree != null && toolbarController.GetItem != null &&
                 toolbarController.GetItem.Name == "Axe" && CastRay() == true)
             {
+                Debug.Log("🌳 Tentando cortar árvore com Axe!");
                 hitTree.Hit();
-                // Debug.Log("we can hit");
-                return true;
-            }
-            if (hitFire != null && toolbarController.GetItem != null &&
-                toolbarController.GetItem.Name == "Wood" && CastRay() == true)
-            {
-                hitFire.Hit();
-                return true;
-            }
-            if (hitChest != null && CastRay() == true)
-            {
-                hitChest.Hit();
-                return true;
-            }
-            if (hitPlayer != null && toolbarController.GetItem != null && CastRayPlayer() == true && (toolbarController.GetItem.Name == "Food_Corn" || toolbarController.GetItem.Name == "Food_Parsley"
-                    || toolbarController.GetItem.Name == "Food_Potato" || toolbarController.GetItem.Name == "Food_Strawberry" || toolbarController.GetItem.Name == "Food_Tomato"))
-            {
-                hitPlayer.Hit();
                 return true;
             }
         }
 
         return false;
     }
+
 
     private void RefreshToolbar()
     {
@@ -237,171 +216,177 @@ public class ToolsCharacterController : MonoBehaviour
         if (Time.timeScale == 0) //if game paused - return
             return;
 
-        // when sth is present on the grid but you can't plant there
         if (selectable == true && toolbarController.GetItem != null)
         {
+            Debug.Log("Tile clicado: " + selectedTilePosition +
+                  " | Item: " + toolbarController.GetItem.Name);
+
+
             TileBase tileBase = tileMapReadController.GetTileBase(selectedTilePosition);
             TileData tileData = tileMapReadController.GetTileData(tileBase);
-            //TileData cropData = cropsReadController.GetTileData(tileBase);
 
-            /*if (toolbarController.GetItem.Name == "WateringCan" && fields[(Vector2Int)selectedTilePosition].watered) //if you are using watering can - play sound of water
-                FindObjectOfType<SoundManager>().Play("Water");*/
-
-            if (tileData != plowableTiles && tileData != toMowTiles && tileData != toSeedTiles && tileData != waterableTiles) //if tile doesn't have any ability
+            // Se o tile não é válido para nenhuma ação → sai
+            if (tileData != plowableTiles && tileData != toMowTiles &&
+                tileData != toSeedTiles && tileData != waterableTiles)
             {
                 return;
             }
 
-            // Debug.Log("Wybrane narzędzie: " + toolbarController.GetItem.Name);
-            //Debug.Log(crops[(Vector2Int)selectedTilePosition]);
-            //if there is no plant on tile
-            if (crops[(Vector2Int)selectedTilePosition].noPlant)
+            Vector2Int pos = (Vector2Int)selectedTilePosition;
+
+            // Garante que a chave existe antes de acessar
+            if (crops.ContainsKey(pos) && crops[pos].noPlant)
             {
-                //usage of tools if tile has suitable ability
-                if (fields[(Vector2Int)selectedTilePosition].ableToMow && toolbarController.GetItem.Name == "Shovel" 
-                    && shopPanel.isOpen == false)
+                // SHOVEL
+                if (fields.ContainsKey(pos) &&
+                    fields[pos].ableToMow &&
+                    toolbarController.GetItem.Name == "Shovel" &&
+                    shopPanel.isOpen == false)
                 {
                     cropsManager.Mow(selectedTilePosition);
                 }
-                else if (fields[(Vector2Int)selectedTilePosition].plowable && toolbarController.GetItem.Name == "Hoe")
+
+                // HOE
+                else if (fields.ContainsKey(pos) &&
+                         fields[pos].plowable &&
+                         toolbarController.GetItem.Name == "Hoe")
                 {
                     cropsManager.Plow(selectedTilePosition);
                 }
-                else if (fields[(Vector2Int)selectedTilePosition].ableToSeed && toolbarController.GetItem.isSeed == true)
+
+                // SEEDS
+                else if (fields.ContainsKey(pos) &&
+                         fields[pos].ableToSeed &&
+                         toolbarController.GetItem.isSeed == true)
                 {
-                    switch (toolbarController.GetItem.Name) //depending on what seed you have chosen
+                    switch (toolbarController.GetItem.Name)
                     {
                         case "Seeds_Corn":
-                            // Checking whether we have more than 4 seeds to seed
-                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count 
-                                >= cornSeedsCount)
+                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count >= cornSeedsCount)
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "corn");
-                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, cornSeedsCount);   // Deletes 4 seeds
+                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, cornSeedsCount);
                             }
-                        break;
+                            break;
+
                         case "Seeds_Parsley":
-                            // Checking whether we have more than 3 seeds to seed
-                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count 
-                                >= parsleySeedsCount)
+                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count >= parsleySeedsCount)
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "parsley");
-                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, parsleySeedsCount);  // Deletes 3 seeds
+                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, parsleySeedsCount);
                             }
-                        break;
+                            break;
+
                         case "Seeds_Potato":
-                            // Checking whether we have more than 1 seed to seed
-                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count 
-                                >= potatoSeedsCount)
+                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count >= potatoSeedsCount)
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "potato");
-                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, potatoSeedsCount);   // Deletes 1 seed
+                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, potatoSeedsCount);
                             }
-                        break;
+                            break;
+
                         case "Seeds_Strawberry":
-                            // Checking whether we have more than 6 seeds to seed
-                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count 
-                                >= strawberrySeedsCount)
+                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count >= strawberrySeedsCount)
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "strawberry");
-                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, strawberrySeedsCount); // Deletes 6 seeds
+                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, strawberrySeedsCount);
                             }
-                        break;
+                            break;
+
                         case "Seeds_Tomato":
-                            // Checking whether we have more than 3 seeds to seed
-                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count 
-                                >= tomatoSeedsCount)
+                            if (GameManager.instance.inventoryContainer.slots[toolbarController.selectedTool].count >= tomatoSeedsCount)
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "tomato");
-                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, tomatoSeedsCount);   // Deletes 3 seeds
+                                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, tomatoSeedsCount);
                             }
-                        break;
+                            break;
                     }
 
-                    // Refreshing the count of seeds
                     RefreshToolbar();
-                }               
+                }
             }
 
-            //usage of tools if there is a planted tile
-            else if (crops[(Vector2Int)selectedTilePosition].planted && fields[(Vector2Int)selectedTilePosition].waterable && toolbarController.GetItem.Name == "WateringCan")
+            // WATERING CAN
+            else if (crops.ContainsKey(pos) &&
+                     crops[pos].planted &&
+                     fields.ContainsKey(pos) &&
+                     fields[pos].waterable &&
+                     toolbarController.GetItem.Name == "WateringCan")
             {
                 cropsManager.Water(selectedTilePosition);
                 FindObjectOfType<SoundManager>().Play("Water");
             }
 
-            else if (crops[(Vector2Int)selectedTilePosition].collectibleCorn && toolbarController.GetItem.Name == "Bag")
+            // BAG → coleta
+            else if (toolbarController.GetItem.Name == "Bag")
             {
-                cropsManager.Collect(selectedTilePosition, "corn");
-                foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
+                if (crops.ContainsKey(pos) && crops[pos].collectibleCorn)
                 {
-                    if (itemSlot.item.Name == "Food_Corn")
+                    cropsManager.Collect(selectedTilePosition, "corn");
+                    foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
                     {
-                        GameManager.instance.inventoryContainer.Add(itemSlot.item, cornPickUpCount);
-                        RefreshToolbar();
-                        break;
+                        if (itemSlot.item.Name == "Food_Corn")
+                        {
+                            GameManager.instance.inventoryContainer.Add(itemSlot.item, cornPickUpCount);
+                            RefreshToolbar();
+                            break;
+                        }
                     }
                 }
-                //Debug.Log("dodajemy corn");
-
-            }
-            else if (crops[(Vector2Int)selectedTilePosition].collectibleParsley && toolbarController.GetItem.Name == "Bag")
-            {
-                cropsManager.Collect(selectedTilePosition, "parsley");
-                foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
+                else if (crops.ContainsKey(pos) && crops[pos].collectibleParsley)
                 {
-                    if (itemSlot.item.Name == "Food_Parsley")
+                    cropsManager.Collect(selectedTilePosition, "parsley");
+                    foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
                     {
-                        GameManager.instance.inventoryContainer.Add(itemSlot.item, parsleyPickUpCount);
-                        RefreshToolbar();
-                        break;
+                        if (itemSlot.item.Name == "Food_Parsley")
+                        {
+                            GameManager.instance.inventoryContainer.Add(itemSlot.item, parsleyPickUpCount);
+                            RefreshToolbar();
+                            break;
+                        }
                     }
                 }
-                //Debug.Log("dodajemy parsley");
-            }
-            else if (crops[(Vector2Int)selectedTilePosition].collectiblePotato && toolbarController.GetItem.Name == "Bag")
-            {
-                cropsManager.Collect(selectedTilePosition, "potato");
-                foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
+                else if (crops.ContainsKey(pos) && crops[pos].collectiblePotato)
                 {
-                    if (itemSlot.item.Name == "Food_Potato")
+                    cropsManager.Collect(selectedTilePosition, "potato");
+                    foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
                     {
-                        GameManager.instance.inventoryContainer.Add(itemSlot.item, potatoPickUpCount);
-                        RefreshToolbar();
-                        break;
+                        if (itemSlot.item.Name == "Food_Potato")
+                        {
+                            GameManager.instance.inventoryContainer.Add(itemSlot.item, potatoPickUpCount);
+                            RefreshToolbar();
+                            break;
+                        }
                     }
                 }
-                //Debug.Log("dodajemy potato");
-            }
-            else if (crops[(Vector2Int)selectedTilePosition].collectibleStrawberry && toolbarController.GetItem.Name == "Bag")
-            {
-                cropsManager.Collect(selectedTilePosition, "strawberry");
-                foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
+                else if (crops.ContainsKey(pos) && crops[pos].collectibleStrawberry)
                 {
-                    if (itemSlot.item.Name == "Food_Strawberry")
+                    cropsManager.Collect(selectedTilePosition, "strawberry");
+                    foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
                     {
-                        GameManager.instance.inventoryContainer.Add(itemSlot.item, strawberryPickUpCount);
-                        RefreshToolbar();
-                        break;
+                        if (itemSlot.item.Name == "Food_Strawberry")
+                        {
+                            GameManager.instance.inventoryContainer.Add(itemSlot.item, strawberryPickUpCount);
+                            RefreshToolbar();
+                            break;
+                        }
                     }
                 }
-                //Debug.Log("dodajemy strawberry");
-            }
-            else if (crops[(Vector2Int)selectedTilePosition].collectibleTomato && toolbarController.GetItem.Name == "Bag")
-            {
-                cropsManager.Collect(selectedTilePosition, "tomato");
-                foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
+                else if (crops.ContainsKey(pos) && crops[pos].collectibleTomato)
                 {
-                    if (itemSlot.item.Name == "Food_Tomato")
+                    cropsManager.Collect(selectedTilePosition, "tomato");
+                    foreach (ItemSlot itemSlot in GameManager.instance.allItemsContainer.slots)
                     {
-                        GameManager.instance.inventoryContainer.Add(itemSlot.item, tomatoPickUpCount);
-                        RefreshToolbar();
-                        break;
+                        if (itemSlot.item.Name == "Food_Tomato")
+                        {
+                            GameManager.instance.inventoryContainer.Add(itemSlot.item, tomatoPickUpCount);
+                            RefreshToolbar();
+                            break;
+                        }
                     }
                 }
-                //Debug.Log("dodajemy tomato");
             }
-
         }
     }
+
 }

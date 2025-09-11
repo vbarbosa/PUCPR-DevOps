@@ -29,19 +29,19 @@ public class PlayerControl : MonoBehaviour
 
     private void Awake()
     {
+        if (GameManager.instance == null || GameManager.instance.inventoryContainer == null)
+            return;
+
         // Deleting all objects from the inventory
         foreach (ItemSlot itemSlot in GameManager.instance.inventoryContainer.slots)
         {
-            if (itemSlot != null)
+            if (itemSlot != null && itemSlot.item != null)
             {
-                if (itemSlot.item != null)
-                {
-                    GameManager.instance.inventoryContainer.RemoveItem(itemSlot.item, itemSlot.count);
-                }
-
+                GameManager.instance.inventoryContainer.RemoveItem(itemSlot.item, itemSlot.count);
             }
         }
     }
+
 
     // Update is called once per frame
     void Update()
@@ -81,19 +81,26 @@ public class PlayerControl : MonoBehaviour
         else
         {
             animator.SetBool("moving", false);
-            if (FindObjectOfType<SoundManager>().SoundIsPlaying("Walk"))
+
+            // Evita erro caso não exista SoundManager na cena
+            var soundManager = FindObjectOfType<SoundManager>();
+            if (soundManager != null && soundManager.SoundIsPlaying("Walk"))
             {
-                FindObjectOfType<SoundManager>().Stop("Walk");
+                soundManager.Stop("Walk");
             }
         }
     }
+
     //Move character
     void Move()
     {
         myRigidbody2D.MovePosition(transform.position + vector * speed * Time.deltaTime);
-        if (!FindObjectOfType<SoundManager>().SoundIsPlaying("Walk"))
+
+        var soundManager = FindObjectOfType<SoundManager>();
+        if (soundManager != null && !soundManager.SoundIsPlaying("Walk"))
         {
-            FindObjectOfType<SoundManager>().Play("Walk");
+            soundManager.Play("Walk");
         }
     }
+
 }
