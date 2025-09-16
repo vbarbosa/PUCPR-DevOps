@@ -1,10 +1,47 @@
-# 📚 Projeto Somativa1 – Biblioteca Virtual (PUCPR‑OED)
+# PUCPR-DevOps
+
+**Disciplina:** DevOps – PUCPR  
+**Atividade em andamento:** Atividade Somativa 2  
+
+Este repositório contém o projeto desenvolvido ao longo da disciplina de **DevOps** da PUCPR.  
+Ele foi iniciado na Atividade Somativa 1 e segue em evolução, incorporando práticas de integração contínua, testes automatizados e uso do GitHub Actions.
+
+---
+
+## 🎯 Objetivo
+
+- Consolidar práticas de **integração contínua (CI)** e **entrega contínua (CD)**.
+- Implementar **testes unitários** e executá-los em cada Pull Request (PR).
+- Configurar **alertas via GitHub Actions**.
+- Documentar a evolução das atividades por meio de screenshots (prints).
+
+---
+
+## 📚 Escopo da Atividade Somativa 2
+
+De acordo com a proposta, esta entrega deve contemplar:
+
+1. **Testes unitários**
+   - Escrita de pelo menos **cinco testes unitários**.
+   - Execução automática dos testes em cada PR criada no repositório.
+   - Uso de **GitHub Actions** para orquestrar o workflow.
+
+2. **Comprovação (prints/screenshots)**
+   - URL e conteúdo do repositório (caso a Atividade Somativa 1 não tenha sido entregue).
+   - Arquivo de workflow configurado para envio de alertas.
+   - Prints de alertas recebidos do GitHub Actions.
+   - Prints mostrando o código dos testes unitários criados.
+   - Prints da execução dos testes dentro de uma PR.
+
+---
+# 📚 Projeto Somativa – Biblioteca Virtual (PUCPR‑OED)
 
 ![Build](https://github.com/vbarbosa/PUCPR-OED/actions/workflows/maven.yml/badge.svg)
 ![Cobertura de Testes](https://img.shields.io/badge/cobertura-92%25-brightgreen)
 
-> **Versão atual:** **`v1.3.0`** – Somativa 2 (Dijkstra & Recomendações)
+> **Versão atual:** **`v1.3.0`** –  (Dijkstra & Recomendações)
 
+---
 ---
 
 ## ✨ Funcionalidades
