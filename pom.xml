@@ -6,20 +6,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!--
-      Grupo e artefato seguem seu padrão atual.
-      Versão incrementada para 1.1.1-SNAPSHOT como exemplo.
-    -->
     <groupId>com.vinot.somativa1</groupId>
     <artifactId>Somativa1</artifactId>
     <version>1.1.1-SNAPSHOT</version>
 
-    <!-- Nome e descrição do projeto -->
     <name>Somativa1 - Biblioteca Virtual</name>
     <url>https://github.com/vbarbosa/PUCPR-OED</url>
     <description>Projeto de biblioteca virtual em Java, com fila de espera para livros e histórico de navegação, desenvolvido por Vinicius (codinome vinot) na PUCPR.</description>
 
-    <!-- Configurações de compilação -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>23</maven.compiler.release>
@@ -27,7 +21,6 @@
         <maven.compiler.target>23</maven.compiler.target>
     </properties>
 
-    <!-- Repositórios (mantido o Sonatype Snapshots) -->
     <repositories>
         <repository>
             <id>sonatype-snapshots</id>
@@ -41,7 +34,6 @@
         </repository>
     </repositories>
 
-    <!-- Dependências existentes (Jackson, JUnit 5 etc.) -->
     <dependencies>
         <!-- Jackson -->
         <dependency>
@@ -49,14 +41,14 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.15.0</version>
         </dependency>
-        <!-- JUnit Platform Suite para rodar a @Suite -->
+
+        <!-- JUnit -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
             <version>1.10.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- JUnit 5 (API, Params, Engine) -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -77,7 +69,6 @@
         </dependency>
     </dependencies>
 
-    <!-- Seção de build com plugins -->
     <build>
         <plugins>
             <plugin>
@@ -88,6 +79,7 @@
                     <mainClass>com.vinot.somativa1.demo.RecommendationDemo</mainClass>
                 </configuration>
             </plugin>
+
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.4.0</version>
@@ -113,51 +105,43 @@
 
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>3.1.2</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.2</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.12.1</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.6.1</version>
-            </plugin>
-
-            <!-- JavaDoc com suporte a Java 23 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.6.3</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.3.0</version>
                 <configuration>
-                    <source>23</source>
-                    <doclint>none</doclint>
-                    <subpackages>com.vinot.somativa1</subpackages>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.vinot.somativa1.application.Main</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
 
-            <!-- Jacoco para relatórios de cobertura de testes -->
+            <!-- Geração do uber-jar com dependências -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.vinot.somativa1.application.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -182,22 +166,14 @@
         </plugins>
     </build>
 
-    <!-- Informações de controle de versão, desenvolvedores etc. -->
     <developers>
         <developer>
-            <!-- O <id> geralmente segue seu usuário do GitHub -->
             <id>vbarbosa</id>
-            <!-- Nome e codinome conforme solicitado -->
             <name>Vinicius (codinome: vinot) - PUCPR</name>
-            <!-- Sem e-mail, conforme pedido -->
         </developer>
     </developers>
 
     <scm>
-        <!--
-          O <connection> e o <developerConnection> podem usar o prefixo 'scm:git:'
-          ou apenas a URL do repositório. Aqui uso o padrão https.
-        -->
         <connection>scm:git:https://github.com/vbarbosa/PUCPR-OED.git</connection>
         <developerConnection>scm:git:https://github.com/vbarbosa/PUCPR-OED.git</developerConnection>
         <url>https://github.com/vbarbosa/PUCPR-OED</url>
