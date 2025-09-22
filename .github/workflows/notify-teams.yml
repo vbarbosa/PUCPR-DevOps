@@ -1,7 +1,11 @@
-name: Notify Teams (simple)
+name: Notify Teams
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
     branches:
       - main
 
@@ -9,8 +13,28 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send simple JSON
+      - name: Send Commit Notification
+        if: github.event_name == 'push'
         run: |
-          curl -v -H 'Content-Type: application/json' \
-               -d '{"text": "🚀 Commit em '"$GITHUB_REPOSITORY"' por '"$GITHUB_ACTOR"' - Hash: '"$GITHUB_SHA"'"}' \
+          curl -H 'Content-Type: application/json' \
+               -d '{
+                     "event": "commit",
+                     "repository": "'"$GITHUB_REPOSITORY"'",
+                     "actor": "'"$GITHUB_ACTOR"'",
+                     "commit_id": "'"$GITHUB_SHA"'",
+                     "commit_url": "https://github.com/'"$GITHUB_REPOSITORY"'/commit/'"$GITHUB_SHA"'"
+                   }' \
+               ${{ secrets.TEAMS_WEBHOOK_URL }}
+
+      - name: Send Pull Request Merge Notification
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+        run: |
+          curl -H 'Content-Type: application/json' \
+               -d '{
+                     "event": "pr_merge",
+                     "repository": "'"$GITHUB_REPOSITORY"'",
+                     "actor": "'"$GITHUB_ACTOR"'",
+                     "pr_title": "'"${{ github.event.pull_request.title }}"'",
+                     "pr_url": "'"${{ github.event.pull_request.html_url }}"'"
+                   }' \
                ${{ secrets.TEAMS_WEBHOOK_URL }}
