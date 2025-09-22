@@ -1,4 +1,4 @@
-name: Notify Teams
+name: Notify Discord
 
 on:
   push:
@@ -6,35 +6,25 @@ on:
       - main
   pull_request:
     types: [closed]
-    branches:
-      - main
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Commit Notification
+      - name: Send commit message to Discord
         if: github.event_name == 'push'
         run: |
-          curl -H 'Content-Type: application/json' \
+          curl -H "Content-Type: application/json" \
                -d '{
-                     "event": "commit",
-                     "repository": "'"$GITHUB_REPOSITORY"'",
-                     "actor": "'"$GITHUB_ACTOR"'",
-                     "commit_id": "'"$GITHUB_SHA"'",
-                     "commit_url": "https://github.com/'"$GITHUB_REPOSITORY"'/commit/'"$GITHUB_SHA"'"
-                   }' \
-               ${{ secrets.TEAMS_WEBHOOK_URL }}
+                 "content": "🚀 Novo commit em **'"$GITHUB_REPOSITORY"'**\n👤 Autor: '"$GITHUB_ACTOR"'\n📝 Mensagem: '"${{ github.event.head_commit.message }}"'\n🔗 https://github.com/'"$GITHUB_REPOSITORY"'/commit/'"$GITHUB_SHA"'"
+               }' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      - name: Send Pull Request Merge Notification
+      - name: Send PR merge message to Discord
         if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
         run: |
-          curl -H 'Content-Type: application/json' \
+          curl -H "Content-Type: application/json" \
                -d '{
-                     "event": "pr_merge",
-                     "repository": "'"$GITHUB_REPOSITORY"'",
-                     "actor": "'"$GITHUB_ACTOR"'",
-                     "pr_title": "'"${{ github.event.pull_request.title }}"'",
-                     "pr_url": "'"${{ github.event.pull_request.html_url }}"'"
-                   }' \
-               ${{ secrets.TEAMS_WEBHOOK_URL }}
+                 "content": "✅ Pull Request **${{ github.event.pull_request.title }}** foi mesclado!\n👤 Autor: $GITHUB_ACTOR\n🔗 ${{ github.event.pull_request.html_url }}"
+               }' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
