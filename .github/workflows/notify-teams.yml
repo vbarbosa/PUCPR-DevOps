@@ -1,4 +1,4 @@
-name: Notify Teams (AdaptiveCard Minimal)
+name: Notify Teams (simple)
 
 on:
   push:
@@ -9,34 +9,8 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Adaptive Card Minimal
+      - name: Send simple JSON
         run: |
           curl -v -H 'Content-Type: application/json' \
-               -d '{
-                     "type": "message",
-                     "attachments": [
-                       {
-                         "contentType": "application/vnd.microsoft.card.adaptive",
-                         "content": {
-                           "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-                           "type": "AdaptiveCard",
-                           "version": "1.4",
-                           "body": [
-                             {
-                               "type": "TextBlock",
-                               "text": "🚀 Commit no repositório '${GITHUB_REPOSITORY}'"
-                             },
-                             {
-                               "type": "TextBlock",
-                               "text": "Autor: ${GITHUB_ACTOR}"
-                             },
-                             {
-                               "type": "TextBlock",
-                               "text": "Hash: ${GITHUB_SHA}"
-                             }
-                           ]
-                         }
-                       }
-                     ]
-                   }' \
+               -d '{"text": "🚀 Commit em '"$GITHUB_REPOSITORY"' por '"$GITHUB_ACTOR"' - Hash: '"$GITHUB_SHA"'"}' \
                ${{ secrets.TEAMS_WEBHOOK_URL }}
