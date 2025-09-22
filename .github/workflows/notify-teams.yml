@@ -16,5 +16,5 @@ jobs:
       - name: Send notification to Teams Workflow
         run: |
           curl -H 'Content-Type: application/json' \
-               -d "{\"text\": \"🚀 Novo commit/merge na branch main por $GITHUB_ACTOR em $GITHUB_REPOSITORY. Commit: $GITHUB_SHA\"}" \
+               -d "{\"text\": \"🚀  Novo commit/merge na branch main por $GITHUB_ACTOR em $GITHUB_REPOSITORY. Commit: $GITHUB_SHA\"}" \
                ${{ secrets.TEAMS_WEBHOOK_URL }}
