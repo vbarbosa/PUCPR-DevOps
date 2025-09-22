@@ -1,4 +1,4 @@
-name: Notify Teams (simple)
+name: Notify Teams
 
 on:
   push:
@@ -9,8 +9,32 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send simple JSON to Teams Flow
+      - name: Send Adaptive Card
         run: |
           curl -H 'Content-Type: application/json' \
-               -d "{\"message\": \"🚀 Commit em $GITHUB_REPOSITORY por $GITHUB_ACTOR\nCommit: $GITHUB_SHA\"}" \
+               -d '{
+                     "type": "message",
+                     "attachments": [
+                       {
+                         "contentType": "application/vnd.microsoft.card.adaptive",
+                         "content": {
+                           "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                           "type": "AdaptiveCard",
+                           "version": "1.4",
+                           "body": [
+                             {
+                               "type": "TextBlock",
+                               "text": "🚀 Commit em '"$GITHUB_REPOSITORY"' por '"$GITHUB_ACTOR"'",
+                               "wrap": true
+                             },
+                             {
+                               "type": "TextBlock",
+                               "text": "Commit: '"$GITHUB_SHA"'",
+                               "wrap": true
+                             }
+                           ]
+                         }
+                       }
+                     ]
+                   }' \
                ${{ secrets.TEAMS_WEBHOOK_URL }}
