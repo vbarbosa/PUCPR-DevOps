@@ -2,29 +2,17 @@ name: Notify Discord
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    types: [closed]
+    types: [opened, closed, reopened]
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send commit message to Discord
-        if: github.event_name == 'push'
+      - name: Send notification to Discord
         run: |
           curl -H "Content-Type: application/json" \
-               -d '{
-                 "content": "🚀 Novo commit em **'"$GITHUB_REPOSITORY"'**\n👤 Autor: '"$GITHUB_ACTOR"'\n📝 Mensagem: '"${{ github.event.head_commit.message }}"'\n🔗 https://github.com/'"$GITHUB_REPOSITORY"'/commit/'"$GITHUB_SHA"'"
-               }' \
-               ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-      - name: Send PR merge message to Discord
-        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
-        run: |
-          curl -H "Content-Type: application/json" \
-               -d '{
-                 "content": "✅ Pull Request **${{ github.event.pull_request.title }}** foi mesclado!\n👤 Autor: $GITHUB_ACTOR\n🔗 ${{ github.event.pull_request.html_url }}"
-               }' \
-               ${{ secrets.DISCORD_WEBHOOK_URL }}
+               -X POST \
+               -d "{\"content\": \"🚀 Novo commit no repositório **${{ github.repository }}**\n🔹 Branch: ${{ github.ref }}\n👤 Autor: ${{ github.actor }}\n📝 Mensagem: ${{ github.event.head_commit.message }}\"}" \
+               ${{ secrets.DISCORD_WEBHOOK }}
