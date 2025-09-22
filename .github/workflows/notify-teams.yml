@@ -1,11 +1,7 @@
-name: Notify Microsoft Teams
+name: Notify Teams (simple)
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    types: [closed]
     branches:
       - main
 
@@ -13,8 +9,8 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send notification to Teams Workflow
+      - name: Send simple JSON to Teams Flow
         run: |
           curl -H 'Content-Type: application/json' \
-               -d "{\"text\": \"🚀  Novo commit/merge na branch main por $GITHUB_ACTOR em $GITHUB_REPOSITORY. Commit: $GITHUB_SHA\"}" \
+               -d "{\"message\": \"🚀 Commit em $GITHUB_REPOSITORY por $GITHUB_ACTOR\nCommit: $GITHUB_SHA\"}" \
                ${{ secrets.TEAMS_WEBHOOK_URL }}
