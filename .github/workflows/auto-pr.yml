@@ -1,0 +1,22 @@
+name: Auto Create PR
+
+on:
+  push:
+    branches-ignore:
+      - main        # evita criar PR quando o push for na própria main
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or Update Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: ${{ github.ref_name }}
+          title: "Auto PR: ${{ github.ref_name }} → main"
+          body: |
+            🚀 Pull request criada automaticamente.
+            - Branch de origem: `${{ github.ref_name }}`
+            - Destino: `main`
