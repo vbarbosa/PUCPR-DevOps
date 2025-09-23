@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinot.somativa1.model.Book;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BookJsonTest {
 
@@ -16,9 +17,11 @@ public class BookJsonTest {
 
     @Test
     public void testDeserializeBooks() throws Exception {
-        File testFile = new File("src/test/resources/test-books.json");
-        LinkedList<Book> books = mapper.readValue(testFile, new TypeReference<>() {
-        });
+        // Carrega arquivo JSON do classpath
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("test-books.json");
+        assertNotNull(inputStream, "Arquivo test-books.json não encontrado em src/test/resources!");
+
+        LinkedList<Book> books = mapper.readValue(inputStream, new TypeReference<>() {});
 
         assertEquals(2, books.size());
 

@@ -13,12 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserJsonTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Test
     public void testDeserializeUsers() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
+        // Carrega arquivo JSON do classpath
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("test-users.json");
-        List<User> users = objectMapper.readValue(inputStream, new TypeReference<List<User>>() {
-        });
+        assertNotNull(inputStream, "Arquivo test-users.json não encontrado em src/test/resources!");
+
+        List<User> users = objectMapper.readValue(inputStream, new TypeReference<List<User>>() {});
 
         assertNotNull(users);
         assertEquals(2, users.size());
@@ -31,15 +34,13 @@ public class UserJsonTest {
 
     @Test
     public void testSerializeUsers() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
         List<User> users = List.of(
                 new User("Usuário Teste 1", "teste1@email.com", "teste1"),
                 new User("Usuário Teste 2", "teste2@email.com", "teste2")
         );
 
         String jsonOutput = objectMapper.writeValueAsString(users);
-        List<User> deserializedUsers = objectMapper.readValue(jsonOutput, new TypeReference<List<User>>() {
-        });
+        List<User> deserializedUsers = objectMapper.readValue(jsonOutput, new TypeReference<List<User>>() {});
 
         assertNotNull(deserializedUsers);
         assertEquals(2, deserializedUsers.size());
