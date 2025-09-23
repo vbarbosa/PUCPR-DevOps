@@ -4,10 +4,12 @@ import com.vinot.somativa1.manager.LibraryFileManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,18 +19,25 @@ public class MainMenuTest {
     private final PrintStream originalOut = System.out;
     private ByteArrayOutputStream output;
 
-    private static final File TEST_BOOK_FILE = new File("src/test/resources/test-books-menu.json");
-    private static final File TEST_USER_FILE = new File("src/test/resources/test-users-menu.json");
+    // Usa diretório temporário para evitar bloqueios no Windows
+    @TempDir
+    Path tempDir;
+
+    private Path testBookFile;
+    private Path testUserFile;
 
     @BeforeEach
     void setup() throws IOException {
-        // Redireciona os caminhos de arquivo para usar os arquivos de teste
-        LibraryFileManager.overridePaths(TEST_BOOK_FILE, TEST_USER_FILE);
-        TEST_BOOK_FILE.getParentFile().mkdirs();
+        // Cria arquivos temporários para cada execução de teste
+        testBookFile = tempDir.resolve("test-books-menu.json");
+        testUserFile = tempDir.resolve("test-users-menu.json");
+
+        // Redireciona os caminhos de arquivo para usar os arquivos temporários
+        LibraryFileManager.overridePaths(testBookFile.toFile(), testUserFile.toFile());
 
         // Preenche os arquivos com um conteúdo JSON inicial válido
-        Files.writeString(TEST_BOOK_FILE.toPath(), "[]", StandardCharsets.UTF_8); // Lista vazia de livros
-        Files.writeString(TEST_USER_FILE.toPath(), "{}", StandardCharsets.UTF_8); // Mapa vazio de usuários
+        Files.writeString(testBookFile, "[]", StandardCharsets.UTF_8);   // Lista vazia de livros
+        Files.writeString(testUserFile, "{}", StandardCharsets.UTF_8); // Mapa vazio de usuários
     }
 
     @AfterEach
@@ -196,7 +205,6 @@ public class MainMenuTest {
 
         String out = output.toString();
         // Verifica se houve confirmação de que o usuário foi adicionado à fila
-        // O Main mostra: "Usuário userFila adicionado à fila de espera do livro 'Livro Fila'"
         assertTrue(out.contains("adicionado à fila de espera") || out.contains("userFila"),
                 "Usuário não foi adicionado à fila de espera corretamente (substring esperada não encontrada).");
     }
@@ -227,7 +235,6 @@ public class MainMenuTest {
         Main.main(null);
 
         String out = output.toString();
-        // "Fila de espera para 'Livro Fila2':" e/ou presença de "UserFila2"
         assertTrue(out.contains("Fila de espera para 'Livro Fila2'") || out.contains("UserFila2"),
                 "Fila de espera não exibida corretamente (não foi encontrada substring esperada).");
     }
@@ -254,8 +261,6 @@ public class MainMenuTest {
         Main.main(null);
 
         String out = output.toString();
-        // Neste ponto, nenhum livro foi "visitado" pelo usuário via UserHistoryManager,
-        // então a saída deve conter algo como "Não há histórico para este usuário."
         assertTrue(out.contains("Não há histórico para este usuário") || out.contains("histUser"),
                 "Histórico não exibido corretamente (mensagem de histórico vazio não encontrada).");
     }
@@ -270,15 +275,10 @@ public class MainMenuTest {
          * 4. Sai
          */
         simulateInput(String.join("\n",
-                // Adiciona Livro1
                 "1", "Livro1", "Autor1", "2000", "",
-                // Adiciona Livro2
                 "1", "Livro2", "Autor2", "2001", "",
-                // Adiciona recomendação: Livro2 para Livro1
                 "20", "Livro1", "Livro2", "",
-                // Lista recomendações de Livro1
                 "19", "Livro1", "",
-                // Sai
                 "0"
         ));
 
