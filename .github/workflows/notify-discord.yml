@@ -1,0 +1,46 @@
+name: Notify Discord
+
+on:
+  push:
+    branches: [ "main", "develop", "feature/*", "hotfix/*" ]
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+jobs:
+  notify:
+    name: 🔔 Notify Discord Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification to Discord
+        run: |
+          # Detecta mensagem (commit ou PR)
+          if [ -n "${{ github.event.head_commit.message }}" ]; then
+            MSG="${{ github.event.head_commit.message }}"
+          else
+            MSG="${{ github.event.pull_request.title }}"
+          fi
+
+          # Detecta status da PR (se aplicável)
+          if [ "${{ github.event.action }}" = "closed" ] && [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            STATUS="✅ **PR Mergeado com sucesso!**"
+          elif [ "${{ github.event.action }}" = "closed" ]; then
+            STATUS="❌ **PR Fechado sem merge.**"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            STATUS="📌 **Novo Push na branch.**"
+          else
+            STATUS="🔄 **Atualização de PR.**"
+          fi
+
+          # Envia para o Discord
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{
+                 \"content\": \"
+                ${STATUS}
+                📦 Repositório: **${{ github.repository }}**
+                🔹 Branch: **${{ github.ref_name }}**
+                👤 Autor: **${{ github.actor }}**
+                📝 Mensagem: ${MSG}
+                 \"
+               }" \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
