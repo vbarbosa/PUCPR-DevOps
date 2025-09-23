@@ -1,0 +1,97 @@
+[ {
+  "title" : "1984",
+  "author" : "George Orwell",
+  "year" : 1949,
+  "bookHash" : -1712237618,
+  "physicalCopyHashes" : [ -1809413302 ],
+  "digitalCopyHashes" : [ -1809411446 ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Senhor dos Anéis",
+  "author" : "Tolkien",
+  "year" : 0,
+  "bookHash" : -277978219,
+  "physicalCopyHashes" : [ -297043109 ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Dom Casmurro",
+  "author" : "Machado de Assis",
+  "year" : 1899,
+  "bookHash" : 401410465,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ -710830169 ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Cem Anos de Solidão",
+  "author" : "Gabriel García Márquez",
+  "year" : 0,
+  "bookHash" : -1242607487,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Pequeno Príncipe",
+  "author" : "Antoine de Saint-Exupéry",
+  "year" : 1943,
+  "bookHash" : -1711859271,
+  "physicalCopyHashes" : [ -1797682105, -1797682261 ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "A Revolução dos Bichos",
+  "author" : "George Orwell",
+  "year" : 1945,
+  "bookHash" : 1219580655,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Crime e Castigo",
+  "author" : "Fiódor Dostoiévski",
+  "year" : 0,
+  "bookHash" : 1683838835,
+  "physicalCopyHashes" : [ 389744137 ],
+  "digitalCopyHashes" : [ 389744221 ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Hobbit",
+  "author" : "J.R.R. Tolkien",
+  "year" : 1937,
+  "bookHash" : -109771201,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Apanhador no Campo de Centeio",
+  "author" : "J.D. Salinger",
+  "year" : 0,
+  "bookHash" : -1900846862,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Moby Dick",
+  "author" : "Herman Melville",
+  "year" : 1851,
+  "bookHash" : -791350763,
+  "physicalCopyHashes" : [ 968278227 ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Livro A",
+  "author" : "Autor A",
+  "year" : 2000,
+  "bookHash" : 606630946,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ 606631939 ]
+}, {
+  "title" : "Livro B",
+  "author" : "Autor B",
+  "year" : 2001,
+  "bookHash" : 606631939,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+} ]

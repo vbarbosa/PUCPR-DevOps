@@ -1,0 +1,89 @@
+[ {
+  "title" : "1984",
+  "author" : "George Orwell",
+  "year" : 1949,
+  "bookHash" : -1712237618,
+  "physicalCopyHashes" : [ -1416908085 ],
+  "digitalCopyHashes" : [ -1416905501 ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Senhor dos Anéis",
+  "author" : "Tolkien",
+  "year" : 0,
+  "bookHash" : -277978219,
+  "physicalCopyHashes" : [ 95463408 ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Dom Casmurro",
+  "author" : "Machado de Assis",
+  "year" : 1899,
+  "bookHash" : 401410465,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ -318323724 ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Cem Anos de Solidão",
+  "author" : "Gabriel García Márquez",
+  "year" : 0,
+  "bookHash" : -1242607487,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Pequeno Príncipe",
+  "author" : "Antoine de Saint-Exupéry",
+  "year" : 1943,
+  "bookHash" : -1711859271,
+  "physicalCopyHashes" : [ -1405175544, -1405155744 ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "A Revolução dos Bichos",
+  "author" : "George Orwell",
+  "year" : 1945,
+  "bookHash" : 1219580655,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Crime e Castigo",
+  "author" : "Fiódor Dostoiévski",
+  "year" : 0,
+  "bookHash" : 1683838835,
+  "physicalCopyHashes" : [ 782270466 ],
+  "digitalCopyHashes" : [ 782270938 ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Hobbit",
+  "author" : "J.R.R. Tolkien",
+  "year" : 1937,
+  "bookHash" : -109771201,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "O Apanhador no Campo de Centeio",
+  "author" : "J.D. Salinger",
+  "year" : 0,
+  "bookHash" : -1900846862,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Moby Dick",
+  "author" : "Herman Melville",
+  "year" : 1851,
+  "bookHash" : -791350763,
+  "physicalCopyHashes" : [ 1360804772 ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+}, {
+  "title" : "Livro Fila",
+  "author" : "Autor Fila",
+  "year" : 2021,
+  "bookHash" : -1775644591,
+  "physicalCopyHashes" : [ ],
+  "digitalCopyHashes" : [ ],
+  "recommendations" : [ ]
+} ]

@@ -25,9 +25,6 @@ Thumbs.db
 /coverage-report/
 *.xml
 
-# === ARQUIVOS DE TESTE GERADOS ===
-src/test/resources/*.json
-!src/test/resources/test-*.json # mantém arquivos modelo, se quiser
 
 # === CONFIGS DE AMBIENTE OPCIONAIS ===
 .env
