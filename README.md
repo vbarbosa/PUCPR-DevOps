@@ -181,6 +181,17 @@ As versões estão em [Releases](https://github.com/vbarbosa/PUCPR-OED/releases)
 * [ ] Documentação atualizada
 
 ---
+## 📝 Histórico de Atividades – Somativa 2 (22-09-25)
+
+- Ajustado workflow de **notificações (notify-teams.yml)** para exibir corretamente o nome do job nas PRs.
+- Criada e validada a branch **feature/test-ci-trigger** para testes de CI em Pull Requests.
+- Executados testes unitários (`MainMenuTest`) com simulação de entrada/saída de console e uso de arquivos JSON temporários.
+- Corrigido README para melhor estrutura e clareza das seções.
+- Garantido que a pipeline no **GitHub Actions** executa:
+  - Build com Maven
+  - Testes JUnit 5
+  - Relatório de cobertura JaCoCo
+  - Notificações de PR no Discord/Teams
 
 ## 📞 Contato
 
