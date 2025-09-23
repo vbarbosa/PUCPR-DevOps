@@ -100,6 +100,7 @@ target/site/jacoco/index.html
 
 ---
 
+
 ### 🧪 Testado com sucesso para a versão `v1.2.0`
 =======
 # ✅ Testes Automatizados — Projeto Somativa1

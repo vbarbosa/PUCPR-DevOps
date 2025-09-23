@@ -217,4 +217,5 @@ As versões estão em [Releases](https://github.com/vbarbosa/PUCPR-OED/releases)
 
 ## 📞 Contato
 
+
 Vinícius Barbosa • Projeto acadêmico PUCPR – 2025
