@@ -15,4 +15,4 @@ jobs:
           curl -H "Content-Type: application/json" \
                -X POST \
                -d "{\"content\": \"🚀 Novo commit no repositório **${{ github.repository }}**\n🔹 Branch: ${{ github.ref }}\n👤 Autor: ${{ github.actor }}\n📝 Mensagem: ${{ github.event.head_commit.message }}\"}" \
-               ${{ secrets.DISCORD_WEBHOOK }}
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
