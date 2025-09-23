@@ -193,6 +193,28 @@ As versões estão em [Releases](https://github.com/vbarbosa/PUCPR-OED/releases)
   - Relatório de cobertura JaCoCo
   - Notificações de PR no Discord/Teams
 
+# ------------------------------------------------------
+# ## 🧩 Criação da Branch `develop`
+#
+# Durante a evolução da **Somativa 2**, configuramos o fluxo Git Flow no repositório.  
+# A branch `develop` foi criada a partir da `main` para centralizar as integrações contínuas de novas features antes de chegar à produção.
+#
+# ### 📌 Comandos utilizados
+#
+# ```bash
+# git checkout -b develop main
+# git push -u origin develop
+# ```
+#
+# ### 📈 Papel da `develop` no fluxo
+#
+# - `feature/*` → desenvolvimento de novas funcionalidades.  
+# - `develop` → integra todas as features antes da entrega.  
+# - `main` → recebe apenas versões estáveis (releases).  
+#
+# Esse fluxo garante maior organização e qualidade no ciclo de vida do projeto.
+# ------------------------------------------------------
+
 ## 📞 Contato
 
 Vinícius Barbosa • Projeto acadêmico PUCPR – 2025
